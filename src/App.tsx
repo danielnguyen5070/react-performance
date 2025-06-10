@@ -1,15 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
-
 import ManagingUI from './exercises/01.managing-ui-state'
-
 import SideEffects from './exercises/02.side-effects'
-
 import LiftingState from './exercises/03.lifting-state'
-
 import Dom from './exercises/04.dom'
-
 import TicTacTes from './exercises/05.tic-tac-toe'
 
 const routes = [

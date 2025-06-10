@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
 	type BlogPost,
-	generateGradient,
 	getMatchingPosts,
 } from '../../shared/blog-posts'
 import { setGlobalSearchParams } from '../../shared/utils'
@@ -136,7 +135,6 @@ function Card({ post }: { post: BlogPost }) {
 		<li className="relative bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden">
 			<div
 				className="h-32"
-				style={{ background: generateGradient(post.id) }}
 			/>
 			<div className="absolute top-2 right-2">
 				<button

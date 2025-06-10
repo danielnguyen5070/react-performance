@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { generateGradient, getMatchingPosts } from '../../shared/blog-posts'
+import { getMatchingPosts } from '../../shared/blog-posts'
 import { setGlobalSearchParams } from '../../shared/utils'
 
 function getQueryParam() {
@@ -112,7 +112,6 @@ function MatchingPosts({ query }: { query: string }) {
 				>
 					<div
 						className="h-32 rounded-t-lg"
-						style={{ background: generateGradient(post.id) }}
 					/>
 					<a
 						href={post.id}

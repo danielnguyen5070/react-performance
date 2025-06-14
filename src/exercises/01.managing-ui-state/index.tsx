@@ -1,108 +1,104 @@
 import { useState } from 'react'
 import { getMatchingPosts } from '../../shared/blog-posts'
 
-// write an App component (add tailwind styles)
-// - This component renders a form with a search input and checkboxes for filtering blog posts.
-// - It displays matching posts based on the search query and selected tags.
-// - Button submits the form and updates the displayed posts.
+function getQueryParam() {
+	console.log('getQueryParam called')
+	const param = new URLSearchParams(window.location.search)
+	return param.get('query') || ''
+}
+
 function App() {
-	const params = new URLSearchParams(window.location.search)
-	console.log('params', params.get('query'))
-	const initialQuery = params.get('query') ?? ''
-	const [query, setQuery] = useState(initialQuery)
+	const [query, setQuery] = useState(getQueryParam)
 
-	const words = query.split(' ').map(w => w.trim())
-	const isCheckedDog = words.includes('dog')
-	const isCheckedCat = words.includes('cat')
-	const isCheckedCaterpillar = words.includes('caterpillar')
-	function handleCheckboxChange(
-		tag: string,
-		isChecked: boolean
-	) {
+	const isDogChecked = query.includes('dog')
+	const isCatChecked = query.includes('cat')
+	const isCaterpillarChecked = query.includes('caterpillar')
+
+	// simple function to handle checkbox change with props: {tag: string, checked: boolean}
+	function handleCheckboxChange({ tag, checked }: { tag: string; checked: boolean }) {
 		const words = query.split(' ').map(w => w.trim())
-		const newWords = isChecked
+		const newQuery = checked
 			? [...words, tag]
-			: words.filter(w => w !== tag)
-		setQuery(newWords.filter(Boolean).join(' ').trim())
+			: words.filter(word => word !== tag)
+		setQuery(newQuery.join(' '))
 	}
-
 	return (
-		<div className="min-h-screen p-6 bg-gray-100">
-			<div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 space-y-6">
-				<form
-					onSubmit={e => {
-						e.preventDefault()
-						// handle form submission logic here
-					}}
-					className="space-y-4"
-				>
-					<div>
+		<>
+			<div className="max-w-4xl mx-auto p-6">
+				<h1 className="text-2xl font-bold mb-4">Blog Post Search</h1>
+				<form className="mb-6">
+					<div className="mb-4">
 						<label
-							htmlFor="searchInput"
-							className="block text-sm font-medium text-gray-700 mb-1"
+							htmlFor="search"
+							className="block text-sm font-medium text-gray-700"
 						>
-							Search:
+							Search Posts
 						</label>
 						<input
 							type="text"
-							id="searchInput"
-							name="query"
-							className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-							placeholder="Type to search..."
+							id="search"
+							className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+							placeholder="Enter keywords..."
 							value={query}
-							onChange={e => setQuery(e.currentTarget.value)}
+							onChange={e => setQuery(e.target.value)}
 						/>
 					</div>
-					<div>
-						<label className="block text-sm font-medium text-gray-700 mb-1">
-							Tags:
-						</label>
-						<div className="flex flex-wrap gap-2">
-							<div className="flex items-center">
+					<div className="mb-4">
+						<div className="mt-2 space-x-4">
+							<label className="inline-flex items-center">
 								<input
 									type="checkbox"
-									id="dog"
-									name="dog"
-									className="mr-2"
-									checked={isCheckedDog}
-									onClick={(e) => handleCheckboxChange('dog', e.currentTarget.checked)}
+									className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+									checked={isCatChecked}
+									onChange={e =>
+										handleCheckboxChange({
+											tag: 'cat',
+											checked: e.target.checked,
+										})
+									}
 								/>
-								<label htmlFor="dog">Dog</label>
-							</div>
-							<div className="flex items-center">
+								<span className="ml-2">Cat</span>
+							</label>
+							<label className="inline-flex items-center">
 								<input
 									type="checkbox"
-									id="cat"
-									name="cat"
-									className="mr-2"
-									checked={isCheckedCat}
-									onClick={(e) => handleCheckboxChange('cat', e.currentTarget.checked)}
+									className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+									checked={isDogChecked}
+									onChange={e =>
+										handleCheckboxChange({
+											tag: 'dog',
+											checked: e.target.checked,
+										})
+									}
 								/>
-								<label htmlFor="cat">Cat</label>
-							</div>
-							<div className="flex items-center">
+								<span className="ml-2">Dog</span>
+							</label>
+							<label className="inline-flex items-center">
 								<input
 									type="checkbox"
-									id="caterpillar"
-									name="caterpillar"
-									className="mr-2"
-									checked={isCheckedCaterpillar}
-									onClick={(e) => handleCheckboxChange('caterpillar', e.currentTarget.checked)}
+									className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+									checked={isCaterpillarChecked}
+									onChange={e =>
+										handleCheckboxChange({
+											tag: 'caterpillar',
+											checked: e.target.checked,
+										})
+									}
 								/>
-								<label htmlFor="caterpillar">Caterpillar</label>								
-							</div>
+								<span className="ml-2">Caterpillar</span>
+							</label>
 						</div>
 					</div>
 					<button
 						type="submit"
-						className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+						className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
 					>
 						Search
 					</button>
 				</form>
 				<MatchingPosts query={query} />
 			</div>
-		</div>
+		</>
 	)
 }
 
@@ -112,22 +108,21 @@ function App() {
 // - it use the getMatchingPosts function to get the matching posts
 // - it have a list of tags to display
 function MatchingPosts({ query }: { query: string }) {
-	const matchingPosts = getMatchingPosts(query)
-
+	const posts = getMatchingPosts(query)
 	return (
-		<div className="space-y-4">
-			{matchingPosts.map(post => (
+		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+			{posts.map(post => (
 				<div
 					key={post.id}
-					className={`p-4 rounded-lg shadow-md ${post.background} text-white`}
+					className={`p-4 rounded-lg shadow-md ${post.background}`}
 				>
-					<h3 className="text-lg font-semibold">{post.title}</h3>
+					<h2 className="text-xl font-bold">{post.title}</h2>
 					<p className="mt-2">{post.description}</p>
-					<div className="mt-2 flex flex-wrap gap-2">
+					<div className="mt-4">
 						{post.tags.map(tag => (
 							<span
 								key={tag}
-								className="bg-white text-blue-600 px-2 py-1 rounded-full text-xs"
+								className="inline-block bg-gray-200 text-gray-800 text-sm px-2 py-1 rounded-full mr-2"
 							>
 								{tag}
 							</span>
@@ -135,11 +130,7 @@ function MatchingPosts({ query }: { query: string }) {
 					</div>
 				</div>
 			))}
-			{matchingPosts.length === 0 && (
-				<p className="text-gray-500">No matching posts found.</p>
-			)}
 		</div>
 	)
 }
-
 export default App

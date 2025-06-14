@@ -1,150 +1,190 @@
 import { useEffect, useState } from 'react'
 import { getMatchingPosts } from '../../shared/blog-posts'
-import { setGlobalSearchParams } from '../../shared/utils'
 
 function getQueryParam() {
-	const params = new URLSearchParams(window.location.search)
-	return params.get('query') ?? ''
+	console.log('getQueryParam called')
+	const param = new URLSearchParams(window.location.search)
+	return param.get('query') || ''
+}
+
+// create a AppDemo component
+// - a checkbox to show or hide App component
+function AppDemo() {
+	const [showApp, setShowApp] = useState(true)
+
+	return (
+		<div className="max-w-4xl mx-auto p-6">
+			<h1 className="text-2xl font-bold mb-4">Blog Post Search Demo</h1>
+			<label className="inline-flex items-center mb-4">
+				<input
+					type="checkbox"
+					className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+					checked={showApp}
+					onChange={e => setShowApp(e.target.checked)}
+				/>
+				<span className="ml-2">Show App</span>
+			</label>
+			{showApp && <App />}
+		</div>
+	)
 }
 
 function App() {
 	const [query, setQuery] = useState(getQueryParam)
-	const words = query.split(' ')
-	const dogChecked = words.includes('dog')
-	const catChecked = words.includes('cat')
-	const caterpillarChecked = words.includes('caterpillar')
+
+	const isDogChecked = query.includes('dog')
+	const isCatChecked = query.includes('cat')
+	const isCaterpillarChecked = query.includes('caterpillar')
 
 	useEffect(() => {
-		const hugeData = new Array(1_000_000).fill(
-			new Array(1_000_000).fill('🐶🐱🐛'),
-		)
-		function updateQuery() {
-			console.log(hugeData)
-			console.log('popstate event listener called')
-			setQuery(getQueryParam())
+		const handlePopState = () => {
+			const newQuery = getQueryParam()
+			setQuery(newQuery)
 		}
-		window.addEventListener('popstate', updateQuery)
+		window.addEventListener('popstate', handlePopState)
 		return () => {
-			window.removeEventListener('popstate', updateQuery)
+			window.removeEventListener('popstate', handlePopState)
 		}
 	}, [])
 
-	function handleCheck(tag: string, checked: boolean) {
-		const newWords = checked ? [...words, tag] : words.filter(w => w !== tag)
-		setQuery(newWords.filter(Boolean).join(' ').trim())
+	useEffect(() => {
+		const timer = setInterval(() => {
+			const hugeData = new Array(1_000_000).fill(
+				new Array(1_000_000).fill('🐶🐱🐛'),
+			)
+			console.log('Huge data created:', hugeData)
+		}
+			, 1000)
+		return () => {
+			clearInterval(timer)
+		}
+	}, [])
+
+
+	function handleCheckboxChange({ tag, checked }: { tag: string; checked: boolean }) {
+		const words = query.split(' ').map(w => w.trim())
+		const newQuery = checked
+			? [...words, tag]
+			: words.filter(word => word !== tag)
+		setQuery(newQuery.join(' '))
+	}
+
+	// write function handling form submission
+	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault()
+		const param = new URLSearchParams(window.location.search)
+		if (query) {
+			param.set('query', query)
+		} else {
+			param.delete('query')
+		}
+		window.history.pushState({}, '', `?${param.toString()}`)
 	}
 
 	return (
-		<div className="max-w-3xl mx-auto p-6 space-y-6 bg-white shadow-md rounded-lg">
-			<form
-				className="space-y-4"
-				onSubmit={e => {
-					e.preventDefault();
-					setGlobalSearchParams({ query });
-				}}
-			>
-				<div className="flex flex-col">
-					<label htmlFor="searchInput" className="text-sm font-semibold mb-1">
-						Search:
-					</label>
-					<input
-						id="searchInput"
-						name="query"
-						type="search"
-						className="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-						value={query}
-						onChange={e => setQuery(e.currentTarget.value)}
-					/>
-				</div>
-
-				<div className="flex flex-wrap gap-4">
-					<label className="flex items-center gap-2">
+		<>
+			<div className="max-w-4xl mx-auto p-6">
+				<h1 className="text-2xl font-bold mb-4">Blog Post Search</h1>
+				<form onSubmit={handleSubmit} className="mb-6">
+					<div className="mb-4">
+						<label
+							htmlFor="search"
+							className="block text-sm font-medium text-gray-700"
+						>
+							Search Posts
+						</label>
 						<input
-							type="checkbox"
-							className="accent-blue-500"
-							checked={dogChecked}
-							onChange={e => handleCheck('dog', e.currentTarget.checked)}
+							type="text"
+							id="search"
+							className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+							placeholder="Enter keywords..."
+							value={query}
+							onChange={e => setQuery(e.target.value)}
 						/>
-						<span>🐶 Dog</span>
-					</label>
-					<label className="flex items-center gap-2">
-						<input
-							type="checkbox"
-							className="accent-blue-500"
-							checked={catChecked}
-							onChange={e => handleCheck('cat', e.currentTarget.checked)}
-						/>
-						<span>🐱 Cat</span>
-					</label>
-					<label className="flex items-center gap-2">
-						<input
-							type="checkbox"
-							className="accent-blue-500"
-							checked={caterpillarChecked}
-							onChange={e => handleCheck('caterpillar', e.currentTarget.checked)}
-						/>
-						<span>🐛 Caterpillar</span>
-					</label>
-				</div>
-
-				<button
-					type="submit"
-					className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
-				>
-					Submit
-				</button>
-			</form>
-
-			<MatchingPosts query={query} />
-		</div>
+					</div>
+					<div className="mb-4">
+						<div className="mt-2 space-x-4">
+							<label className="inline-flex items-center">
+								<input
+									type="checkbox"
+									className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+									checked={isCatChecked}
+									onChange={e =>
+										handleCheckboxChange({
+											tag: 'cat',
+											checked: e.target.checked,
+										})
+									}
+								/>
+								<span className="ml-2">Cat</span>
+							</label>
+							<label className="inline-flex items-center">
+								<input
+									type="checkbox"
+									className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+									checked={isDogChecked}
+									onChange={e =>
+										handleCheckboxChange({
+											tag: 'dog',
+											checked: e.target.checked,
+										})
+									}
+								/>
+								<span className="ml-2">Dog</span>
+							</label>
+							<label className="inline-flex items-center">
+								<input
+									type="checkbox"
+									className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+									checked={isCaterpillarChecked}
+									onChange={e =>
+										handleCheckboxChange({
+											tag: 'caterpillar',
+											checked: e.target.checked,
+										})
+									}
+								/>
+								<span className="ml-2">Caterpillar</span>
+							</label>
+						</div>
+					</div>
+					<button
+						type="submit"
+						className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
+					>
+						Search
+					</button>
+				</form>
+				<MatchingPosts query={query} />
+			</div>
+		</>
 	)
 }
 
 function MatchingPosts({ query }: { query: string }) {
-	const matchingPosts = getMatchingPosts(query)
-
+	const posts = getMatchingPosts(query)
 	return (
-		<ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
-			{matchingPosts.map(post => (
-				<li
+		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+			{posts.map(post => (
+				<div
 					key={post.id}
-					className="border rounded-lg shadow hover:shadow-lg transition"
+					className={`p-4 rounded-lg shadow-md ${post.background}`}
 				>
-					<div
-						className="h-32 rounded-t-lg"
-					/>
-					<a
-						href={post.id}
-						className="block p-4"
-						onClick={event => {
-							event.preventDefault()
-							alert(`Great! Let's go to ${post.id}!`)
-						}}
-					>
-						<h2 className="text-lg font-semibold mb-1">{post.title}</h2>
-						<p className="text-sm text-gray-600">{post.description}</p>
-					</a>
-				</li>
+					<h2 className="text-xl font-bold">{post.title}</h2>
+					<p className="mt-2">{post.description}</p>
+					<div className="mt-4">
+						{post.tags.map(tag => (
+							<span
+								key={tag}
+								className="inline-block bg-gray-200 text-gray-800 text-sm px-2 py-1 rounded-full mr-2"
+							>
+								{tag}
+							</span>
+						))}
+					</div>
+				</div>
 			))}
-		</ul>
-	)
-}
-
-export default function DemoApp() {
-	const [showForm, setShowForm] = useState(true)
-
-	return (
-		<div className="min-h-screen">
-			<label className="flex items-center gap-2 mb-4">
-				<input
-					type="checkbox"
-					className="accent-blue-500"
-					checked={showForm}
-					onChange={e => setShowForm(e.currentTarget.checked)}
-				/>
-				<span className="text-sm">Show form</span>
-			</label>
-			{showForm && <App />}
 		</div>
 	)
 }
+export default AppDemo

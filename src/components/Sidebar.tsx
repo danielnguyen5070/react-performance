@@ -5,23 +5,27 @@ import { NavLink } from 'react-router-dom';
 const menuItems = [
     {
         label: 'Managing UI State',
-        path: '/managing-ui-state/usestate'
+        path: '/managing-ui-state'
     },
     {
         label: 'Side-Effects',
-        path: '/effect/use-effect'
+        path: '/effect'
     },
     {
         label: 'Lifting State',
-        path: '/lifting-state/lift-state'
+        path: '/lifting-state'
     },
     {
         label: 'DOM Side-Effects',
-        path: '/dom-effect/refs'
+        path: '/dom-effect'
+    },
+    {
+        label: 'Use Id',
+        path: '/use-id'
     },
     {
         label: 'Tic Tac Toe',
-        path: '/tictactos/setstate'
+        path: '/tictactos'
     },
 ];
 

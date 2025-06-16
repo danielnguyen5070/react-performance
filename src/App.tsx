@@ -5,14 +5,16 @@ import ManagingUI from './exercises/01.managing-ui-state'
 import SideEffects from './exercises/02.side-effects'
 import LiftingState from './exercises/03.lifting-state'
 import Dom from './exercises/04.dom'
-import TicTacTes from './exercises/05.tic-tac-toe'
+import Id from './exercises/05.id'
+import TicTacTes from './exercises/06.tic-tac-toe'
 
 const routes = [
-  { path: "/managing-ui-state/usestate", element: <ManagingUI /> },
-  { path: "/effect/use-effect", element: <SideEffects /> },
-  { path: "/lifting-state/lift-state", element: <LiftingState /> },
-  { path: "/dom-effect/refs", element: <Dom /> },
-  { path: "/tictactos/setstate", element: <TicTacTes /> },
+  { path: "/managing-ui-state", element: <ManagingUI /> },
+  { path: "/effect", element: <SideEffects /> },
+  { path: "/lifting-state", element: <LiftingState /> },
+  { path: "/dom-effect", element: <Dom /> },
+  { path: "/use-id", element: <Id /> },
+  { path: "/tictactos", element: <TicTacTes /> },
 ];
 
 function App() {

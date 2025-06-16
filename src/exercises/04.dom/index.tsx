@@ -1,22 +1,29 @@
 import { useState } from 'react'
 import './index.css'
 // 💰 you'll need this stuff:
-// import VanillaTilt from 'vanilla-tilt'
+import VanillaTilt from 'vanilla-tilt'
 
-// interface HTMLVanillaTiltElement extends HTMLDivElement {
-// 	vanillaTilt?: VanillaTilt
-// }
+interface HTMLVanillaTiltElement extends HTMLDivElement {
+	vanillaTilt?: VanillaTilt
+}
 
-// const vanillaTiltOptions = {
-// 	max: 25,
-// 	speed: 400,
-// 	glare: true,
-// 	'max-glare': 0.5,
-// }
+const vanillaTiltOptions = {
+	max: 25,
+	speed: 400,
+	glare: true,
+	'max-glare': 0.5,
+}
 
 function Tilt({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="tilt-root" >
+		<div ref={(node: HTMLVanillaTiltElement) => {
+			if (!node) return
+			VanillaTilt.init(node, vanillaTiltOptions)
+			return () => {
+				node.vanillaTilt?.destroy()
+			}
+		}}
+			className="tilt-root" >
 			<div className="tilt-child">{children}</div>
 		</div >
 	)

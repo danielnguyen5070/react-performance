@@ -4,7 +4,6 @@ const defaultState = Array(9).fill(null)
 
 function Board() {
 	const squares = defaultState
-
 	function renderSquare(i: number) {
 		return (
 			<button
@@ -49,5 +48,11 @@ function App() {
 		</div>
 	)
 }
+
+// create a type for the squares state
+// create a function to calculate:
+// 	calculateNextValue
+// 	calculateStatus
+// 	calculateWinner
 
 export default App

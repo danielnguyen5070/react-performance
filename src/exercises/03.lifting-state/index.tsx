@@ -167,7 +167,7 @@ function Card({ post }: { post: BlogPost }) {
 	return (
 		<div
 			key={post.id}
-			className={`p-4 rounded-lg shadow-md ${post.background}`}
+			className={`p-4 rounded-lg shadow-md ${post.color}`}
 		>
 			{
 				favorites.includes(post.id)

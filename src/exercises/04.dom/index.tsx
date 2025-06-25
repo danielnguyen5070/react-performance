@@ -1,25 +1,36 @@
-import { useState } from 'react'
-// import VanillaTilt from 'vanilla-tilt'
-//
-// interface HTMLVanillaTiltElement extends HTMLDivElement {
-// 	vanillaTilt?: VanillaTilt
-// }
-//
-// const vanillaTiltOptions = {
-// 	max: 25,
-// 	speed: 400,
-// }
+import { useEffect, useState, useRef } from 'react'
+import VanillaTilt from 'vanilla-tilt'
+import './index.css'
 
-function Tilt({ children }: { children: React.ReactNode }) {
+interface HTMLVanillaTiltElement extends HTMLDivElement {
+	vanillaTilt?: VanillaTilt
+}
+
+const vanillaTiltOptions = {
+	max: 25,
+	speed: 400,
+}
+
+function Tilt({ max, speed, children }: { max: number; speed: number; children: React.ReactNode }) {
+	const tiltNode = useRef<HTMLVanillaTiltElement>(null)
+
+	useEffect(() => {
+		const newOptions = {
+			max,
+			speed,
+		}
+		const tiltNodeCurrent = tiltNode.current
+		if (!tiltNodeCurrent) return
+		VanillaTilt.init(tiltNodeCurrent, newOptions)
+		return () => {
+			tiltNodeCurrent.vanillaTilt?.destroy()
+		}
+	}, [max, speed])
+
 	return (
 		<div
 			className="tilt-root"
-			// add a ref callback here
-			// the callback should accept a tiltNode parameter 
-			// - if tiltNode is null, return
-			// - call VanillaTilt.init(tiltNode, vanillaTiltOptions)
-			// - return a cleanup function that will be called when element is removed
-			//   - call tiltNode.vanillaTilt?.destroy()
+			ref={tiltNode}
 		>
 			<div className="tilt-child">{children}</div>
 		</div>
@@ -29,14 +40,37 @@ function Tilt({ children }: { children: React.ReactNode }) {
 function App() {
 	const [showTilt, setShowTilt] = useState(true)
 	const [count, setCount] = useState(0)
+	const [options, setOptions] = useState(vanillaTiltOptions)
+	const { max, speed } = options
 	return (
 		<div>
+			<form className="mb-4">
+				<label className="block mb-2">
+					Max Angle:
+					<input
+						className="ml-2 border border-gray-300 rounded p-1"
+						type="number"
+						value={max}
+						onChange={(e) => setOptions(o => ({ ...o, max: Number(e.target.value) }))}
+					/>
+				</label>
+				<label className="block mb-2">
+					Speed:
+					<input
+						className="ml-2 border border-gray-300 rounded p-1"
+						type="number"
+						value={speed}
+						onChange={(e) => setOptions(o => ({ ...o, speed: Number(e.target.value) }))}
+					/>
+				</label>
+			</form>
 			<label className="block mb-2">
 				<input className='mr-1' type='checkbox' onChange={() => setShowTilt(s => !s)}></input>
 				Toggle Visibility
 			</label>
+
 			{showTilt ? (
-				<Tilt>
+				<Tilt max={max} speed={speed}>
 					<div className="totally-centered">
 						<button
 							className="count-button"

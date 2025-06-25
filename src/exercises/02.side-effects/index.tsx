@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getMatchingPosts } from '../../shared/blog-posts'
 
 function getQueryParam(): string {
@@ -27,9 +27,45 @@ function App() {
 		}
 		setQuery(currentTags.join(' '))
 	}
+
+	function handleSubmit(event: React.FormEvent) {
+		event.preventDefault()
+		const params = new URLSearchParams(window.location.search)
+		params.set("query", query)
+		window.history.pushState({}, '', `?${params.toString()}`)
+	}
+
+	useEffect(() => {
+		const handlePopState = () => {
+			setQuery(getQueryParam())
+		}
+		window.addEventListener('popstate', handlePopState)
+		return () => {
+			window.removeEventListener('popstate', handlePopState)
+		}
+	}, [])
+
+	const [count, setCount] = useState(0)
+	useEffect(() => {
+		const timer = setInterval(() => {
+			const hugeData = new Array(1_000_000).fill(
+				new Array(1_000_000).fill('🐶🐱🐛'))
+			console.log(hugeData)
+		}, 1000)
+		return () => {
+			clearInterval(timer)
+			console.log('Cleanup interval')
+		}
+	}, [count])
 	return (
 		<div>
-			<form>
+			<button
+				onClick={() => setCount(count + 1)}
+				className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
+			>
+				Click me to increase count: {count}
+			</button>
+			<form onSubmit={handleSubmit}>
 				<div className="mb-4">
 					<label className="block text-gray-700 mb-2" htmlFor="search">
 						Search:
@@ -107,5 +143,3 @@ function MatchingPosts({ query }: { query: string }) {
 
 export default App
 
-// const hugeData = new Array(1_000_000).fill(
-// 				new Array(1_000_000).fill('🐶🐱🐛')

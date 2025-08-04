@@ -4,28 +4,32 @@ import { NavLink } from 'react-router-dom';
 // Array of menu items
 const menuItems = [
     {
-        label: 'Managing UI State',
-        path: '/managing-ui-state'
+        label: 'Element Optimization',
+        path: '/element-optimization'
     },
     {
-        label: 'Side-Effects',
-        path: '/effect'
+        label: 'Optimize Context',
+        path: '/optimize-context'
     },
     {
-        label: 'Lifting State',
-        path: '/lifting-state'
+        label: 'Concurrent Rendering',
+        path: '/concurrent-rendering'
     },
     {
-        label: 'DOM Side-Effects',
-        path: '/dom-effect'
+        label: 'Code Splitting',
+        path: '/code-splitting'
     },
     {
-        label: 'Use Id',
-        path: '/use-id'
+        label: 'Expensive Calculations',
+        path: '/expensive-calculations'
     },
     {
-        label: 'Tic Tac Toe',
-        path: '/tictactos'
+        label: 'Optimize Rendering',
+        path: '/optimize-rendering'
+    },
+    {
+        label: 'Windowing',
+        path: '/windowing'
     },
 ];
 

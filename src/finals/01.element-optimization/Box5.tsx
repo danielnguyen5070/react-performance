@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-
-function GrandchildBox({ name }: { name: string }) {
+import React, { useState, memo } from "react";
+const GrandchildBox = memo(function ({ name }: { name: string }) {
     const text = useTextChild();
     console.log("Render GrandchildBox");
     return (
@@ -9,7 +8,7 @@ function GrandchildBox({ name }: { name: string }) {
             <div className="bg-purple-500 rounded mt-2 px-3 py-1 text-white">Name: {name}</div>
         </>
     )
-}
+})
 
 function ChildBox({ grandchild }: { grandchild: React.ReactNode }) {
     console.log("Render ChildBox");
@@ -32,12 +31,11 @@ export function Box5() {
     const [count, setCount] = useState(0);
     const [name, setName] = useState("Daniel");
     console.log("Render Box1");
-    const grandchildBoxElement = <GrandchildBox name={name} />;
 
     return (
         <TextChildContext value={text}>
             <div className="p-4 bg-green-500 rounded-xl shadow-sm">
-                <div className="font-bold">Box 4 <span className="text-sm font-normal">{text}</span></div>
+                <div className="font-bold">Box 5 <span className="text-sm font-normal">{text}</span></div>
                 <button
                     className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-lg"
                     onClick={() => setCount(count + 1)}
@@ -54,7 +52,7 @@ export function Box5() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                 />
-                <ChildBox grandchild={grandchildBoxElement} />
+                <ChildBox grandchild={<GrandchildBox name={name} />} />
             </div>
         </TextChildContext>
     )

@@ -1,6 +1,6 @@
-import React, { useState, memo } from "react";
+import React, { useState } from "react";
 
-const GrandchildBox = memo(function () {
+function GrandchildBox() {
     const { text, name } = useTextChild();
     console.log("Render GrandchildBox");
     return (
@@ -9,7 +9,7 @@ const GrandchildBox = memo(function () {
             <div className="bg-purple-500 rounded mt-2 px-3 py-1 text-white">Name: {name}</div>
         </>
     )
-})
+}
 const grandchildBoxElement = <GrandchildBox />;
 
 function ChildBox({ grandchild }: { grandchild: React.ReactNode }) {

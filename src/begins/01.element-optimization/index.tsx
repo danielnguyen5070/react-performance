@@ -6,16 +6,19 @@ import { Box1 } from "./Box1";
 import { Box2 } from "./Box2";
 import { Box3 } from "./Box3";
 import { Box4 } from "./Box4";
+import { Box5 } from "./Box5";
 function Main({
 	box1,
 	box2,
 	box3,
 	box4,
+	box5,
 }: {
 	box1: React.ReactNode;
 	box2: React.ReactNode;
 	box3: React.ReactNode;
 	box4: React.ReactNode;
+	box5: React.ReactNode;
 }) {
 	const [count, setCount] = useState(0);
 	const increment = () => setCount((c) => c + 1);
@@ -27,7 +30,7 @@ function Main({
 			>
 				The count is {count}
 			</button>
-			<div className="grid grid-cols-2 gap-4">{[box1, box2, box3, box4]}</div>
+			<div className="grid grid-cols-2 gap-4">{[box1, box2, box3, box4, box5]}</div>
 		</main>
 	);
 }
@@ -68,6 +71,7 @@ function App() {
 						box2={<Box2 />}
 						box3={<Box3 />}
 						box4={<Box4 />}
+						box5={<Box5 />}
 					/>
 					<Footer theme={name} />
 				</ColorProvider>

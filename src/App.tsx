@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import ElementOptimization from './begins/01.element-optimization'
-import OptimizeContext from './finals/02.optimize-context'
-import ConcurrentRendering from './finals/03.concurrent-rendering'
-import CodeSplitting from './finals/04.code-splitting'
-import ExpensiveCalculations from './finals/05.expensive-calculations'
-import OptimizeRendering from './finals/06.optimize-rendering'
-import Windowing from './finals/07.windowing'
+import OptimizeContext from './begins/02.optimize-context'
+import ConcurrentRendering from './begins/03.concurrent-rendering'
+import CodeSplitting from './begins/04.code-splitting'
+import ExpensiveCalculations from './begins/05.expensive-calculations'
+import OptimizeRendering from './begins/06.optimize-rendering'
+import Windowing from './begins/07.windowing'
 
 const routes = [
   { path: "/element-optimization", element: <ElementOptimization /> },

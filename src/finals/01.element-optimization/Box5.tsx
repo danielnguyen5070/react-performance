@@ -37,7 +37,7 @@ export function Box5() {
     return (
         <TextChildContext value={text}>
             <div className="p-4 bg-green-500 rounded-xl shadow-sm">
-                <div className="font-bold">Box 5 <span className="text-sm font-normal">{text}</span></div>
+                <div className="font-bold">Box 4 <span className="text-sm font-normal">{text}</span></div>
                 <button
                     className="mt-2 px-3 py-1 bg-blue-500 text-white rounded-lg"
                     onClick={() => setCount(count + 1)}

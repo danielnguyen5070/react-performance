@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 
 function GrandchildBox() {
-    const { text, name } = useTextChild();
+    const { text, name } = useBoxContext();
     console.log("Render GrandchildBox");
     return (
         <>
@@ -12,7 +12,7 @@ function GrandchildBox() {
 }
 const grandchildBoxElement = <GrandchildBox />;
 
-function ChildBox({ grandchild }: { grandchild: React.ReactNode }) {
+const ChildBox = memo(function ({ grandchild }: { grandchild: React.ReactNode }) {
     console.log("Render ChildBox");
     const [count, setCount] = useState(0);
 
@@ -26,7 +26,7 @@ function ChildBox({ grandchild }: { grandchild: React.ReactNode }) {
         </button>
         {grandchild}
     </div>;
-}
+})
 
 export function Box() {
     console.log("Render Box1");
@@ -38,7 +38,7 @@ export function Box() {
     const value = { text, name };
 
     return (
-        <TextChildContext value={value}>
+        <BoxContext value={value}>
             <div className="p-4 bg-green-500 rounded-xl shadow-sm">
                 <div className="font-bold">Box 5 <span className="text-sm font-normal">{text}</span></div>
                 <button
@@ -59,20 +59,20 @@ export function Box() {
                 />
                 <ChildBox grandchild={grandchildBoxElement} />
             </div>
-        </TextChildContext>
+        </BoxContext>
     )
 }
 
-type TextChildContextType = {
+type BoxContextType = {
     text: string;
     name: string;
 }
-const TextChildContext = React.createContext<TextChildContextType | null>(null);
+const BoxContext = React.createContext<BoxContextType | null>(null);
 
-function useTextChild() {
-    const context = React.useContext(TextChildContext);
+function useBoxContext() {
+    const context = React.useContext(BoxContext);
     if (!context) {
-        throw new Error("useTextChild must be used within a TextChildProvider");
+        throw new Error("useBox must be used within a BoxProvider");
     }
     return context;
 }

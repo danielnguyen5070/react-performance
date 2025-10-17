@@ -1,9 +1,13 @@
-import React from 'react'
+import { Box } from "./Box";
 
-const index = () => {
+function App() {
 	return (
-		<div>index</div>
-	)
+		<div className="min-h-screen bg-gray-50 flex flex-col items-center py-10">
+			<div className="w-full max-w-xl bg-white p-6 rounded-2xl shadow-lg space-y-6">
+				<Box />
+			</div>
+		</div>
+	);
 }
 
-export default index
+export default App;

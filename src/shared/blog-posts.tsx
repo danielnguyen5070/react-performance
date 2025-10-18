@@ -84,6 +84,7 @@ const blogPosts = [
 export type BlogPost = (typeof blogPosts)[number]
 
 export function getMatchingPosts(query: string) {
+	console.log('Searching for posts with query:', query)
 	const words = query.split(' ').map(w => w.trim())
 	return blogPosts.filter(post => {
 		if (!query) return true

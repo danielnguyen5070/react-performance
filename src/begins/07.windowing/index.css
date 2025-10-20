@@ -1,0 +1,16 @@
+[role='listbox'] {
+	overflow-y: scroll;
+	background-color: #eee;
+	list-style: none;
+	position: relative;
+
+	[role='option'] {
+		&[aria-selected='true'] {
+			font-weight: bold;
+		}
+		&[data-hovered='true'],
+		&[data-focused='true'] {
+			background-color: #ddd;
+		}
+	}
+}
